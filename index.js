@@ -8,4 +8,8 @@ app.listen(
     console.log(`http://localhost:${port}`)
 );
 
-app.get
+app.get('getuser', (req, res) (
+    res.status(200).send('request received')
+)
+
+)
