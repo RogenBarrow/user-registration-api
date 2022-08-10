@@ -1,25 +1,9 @@
-import postgres from 'postgres';
-
 const express = require('express')
 const app = express()
 const port = 55;
 
-
-
-const sql = postgres('postgres://postgres:nathifa@host:8033/Client_Registration')
-        .then( () => {
-            console.log('Connected to database')
-        })
-        .catch( (err) => {
-            console.error('Error connecting to the database')
-        })
-
-
-const selectAll = await sql`
-SELECT  *
-FROM    Registration
-`
-
+const pgp = require('pg-promise')
+const db = pgp('postrgres://postgres:nathifa@localhost:8033/Client_Registration')
 
 
 app.listen(
@@ -28,5 +12,16 @@ app.listen(
 );
 
 app.get('/getuser', (req, res) => (
-    res.status(200).send({selectAll})
+
+    db.one( ('SELECT * FROM Registration')
+        .then((databaseData) => {
+            console.log('Data:', databaseData.value)
+        })
+        .catch((error) => {
+            console.log('Error:', error)
+        });
+
+    )
+
+    res.status(200).send()
 ));
