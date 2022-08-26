@@ -18,7 +18,6 @@ app.listen(
 app.get('/getuser',async (req, res) => (
    await db.any( `SELECT fullname, username, gender, email FROM Registration`)
         .then((databaseData) => {
-            //const [{fullname, username, gender, email}] = databaseData;
             console.log('Data:', databaseData)
             res.status(200).send(databaseData);
             
@@ -33,9 +32,10 @@ app.post('/adduser', (req, res) => (
     db.any(`INSERT INTO Registration(fullname, username, gender, email) VALUES ('${req.body.fullname}', '${req.body.username}', '${req.body.gender}', '${req.body.email}')`)
     .then((newUserData) => {
         // const [{fullname, username, gender, email}] = newUserData;
-        console.log(newUserData);
-        console.log(req.body);
-        res.status(200).send('Username created.')
+        if (!req.body.fullname) return res.status(400).send("No username availabe can't process.");
+
+        console.log(`The user: ${req.body.username} has been added on ${Date()}`);
+        res.status(200).send(`${req.body.username} Username created.`);
     })
     .catch((error) => {
         console.log('Error:', error)
