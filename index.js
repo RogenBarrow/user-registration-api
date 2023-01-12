@@ -3,6 +3,7 @@ const app = express()
 const port = 55;
 const bodyParser = require('body-parser');
 const { query } = require('express');
+const { queryResult } = require('pg-promise');
 
 //import validator from 'validator';
 
@@ -50,25 +51,35 @@ app.post('/adduser', (req, res) => {
     
 });
 
-app.get('/searchuser',async (req, res) => (
-    await db.any( `SELECT username FROM Registration`)
+app.get('/searchuser',async (req, res) => {
+    const {username} = req.query;
+    console.log(username);
+    await db.one( `SELECT username FROM Registration WHERE username = $1`, username)
          .then((databaseData) => {
              console.log('Data:', databaseData)
-             const queryrequest = req.query;
-             console.log(queryrequest);
-             const result = databaseData.map(queryrequest => {
-                return queryrequest.username;
-             });
-             console.log(result);
+            
                                    
-             res.status(200).send(result);
-             
-             
-             
+             res.status(200).send(databaseData);
          })
          .catch((error) => {
              console.log('Error:', error)
              res.status(400).send('Request not found');
          })
-     ));
+        });
     
+        app.get('/searchuserbyfirstletter',async (req, res) => {
+            const { firstletter } = req.query;
+            const filter = firstletter + '%';
+            console.log(firstletter);
+            await db.any( `SELECT username FROM Registration WHERE username LIKE $1`, filter)
+                 .then((databaseData) => {
+                     console.log('Data:', databaseData)
+                    
+                                           
+                     res.status(200).send(databaseData);
+                 })
+                 .catch((error) => {
+                     console.log('Error:', error)
+                     res.status(400).send('Request not found');
+                 })
+                });        
