@@ -74,7 +74,6 @@ app.get('/searchuser',async (req, res) => {
             await db.any( `SELECT username FROM Registration WHERE username LIKE $1`, filter)
                  .then((databaseData) => {
                      console.log('Data:', databaseData)
-                    
                                            
                      res.status(200).send(databaseData);
                  })
