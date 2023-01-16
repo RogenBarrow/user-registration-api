@@ -43,9 +43,7 @@ app.post('/adduser', (req, res) => {
 
    
     db.any(`INSERT INTO Registration(fullname, username, gender, email) VALUES ('${req.body.fullname}', '${req.body.username}', '${req.body.gender}', '${req.body.email}')`)
-    .then((newUserData) => {
-        // const [{fullname, username, gender, email}] = newUserData;
-        
+    .then((newUserData) => {     
 
         console.log(`The user: ${req.body.username} has been added on ${Date()}`);
         res.status(200).send(`${req.body.username} Username created.`);
@@ -62,9 +60,7 @@ app.get('/searchuser',async (req, res) => {
     console.log(username);
     await db.one( `SELECT username FROM Registration WHERE username = $1`, username)
          .then((databaseData) => {
-             console.log('Data:', databaseData)
-            
-                                   
+             console.log('Data:', databaseData)                
              res.status(200).send(databaseData);
          })
          .catch((error) => {
@@ -79,8 +75,7 @@ app.get('/searchuser',async (req, res) => {
             console.log(firstletter);
             await db.any( `SELECT username FROM Registration WHERE username LIKE $1`, filter)
                  .then((databaseData) => {
-                     console.log('Data:', databaseData)
-                                           
+                     console.log('Data:', databaseData)          
                      res.status(200).send(databaseData);
                  })
                  .catch((error) => {
