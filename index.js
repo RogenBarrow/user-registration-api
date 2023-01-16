@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const { query } = require('express');
 const { queryResult } = require('pg-promise');
 
-//import validator from 'validator';
+import validator from 'validator';
 
 const pgp = require('pg-promise')({});
 const db = pgp('postrgres://postgres:Nathifa@localhost:8033/Client_Registration')
@@ -35,7 +35,13 @@ app.get('/getuser',async (req, res) => (
 app.post('/adduser', (req, res) => {
     if (!req.body.fullname) return res.status(400).send("No username availabe can't process.");
 
-   //validator.isEmpty(req.body,fullname)
+    //validate if string is either empty or is an email
+   validator.isEmpty(req.body,fullname)
+   validator.isEmail(req.body.email)
+   validator.isEmpty(req.body.username)
+   validator.isEmpty(req.body.gender)
+
+   
     db.any(`INSERT INTO Registration(fullname, username, gender, email) VALUES ('${req.body.fullname}', '${req.body.username}', '${req.body.gender}', '${req.body.email}')`)
     .then((newUserData) => {
         // const [{fullname, username, gender, email}] = newUserData;
