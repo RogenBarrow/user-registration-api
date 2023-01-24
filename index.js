@@ -4,8 +4,10 @@ const port = 55;
 const bodyParser = require('body-parser');
 const { query } = require('express');
 const { queryResult } = require('pg-promise');
+const validator = require('validator');
+const securePassword = require('secure-password');
 
-import validator from 'validator';
+const pwd = securePassword();
 
 const pgp = require('pg-promise')({});
 const db = pgp('postrgres://postgres:Nathifa@localhost:8033/Client_Registration')
@@ -47,6 +49,25 @@ app.post('/adduser', (req, res) => {
 
         console.log(`The user: ${req.body.username} has been added on ${Date()}`);
         res.status(200).send(`${req.body.username} Username created.`);
+    })
+    .catch((error) => {
+        console.log('Error:', error)
+        res.status(400).send('Users not added.') 
+    })
+    
+});
+
+app.post('/addpassword', (req, res) => {
+    const { username } = req.query;
+    const { password } = req.query
+
+    pwd.hash(password, function (err, hash))
+   
+    db.any(`UPDATE Registration SET password = $1 WHERE username = $2`, [password, username])
+    .then((newUserData) => {     
+
+        console.log(`The user: ${username} has been added on ${Date()} with password`);
+        res.status(200).send(`New password created`);
     })
     .catch((error) => {
         console.log('Error:', error)
