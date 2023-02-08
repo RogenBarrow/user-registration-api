@@ -61,9 +61,36 @@ app.post('/addpassword', (req, res) => {
     const { username } = req.query;
     const { password } = req.query
 
-    pwd.hash(password, function (err, hash))
+    const hashedPassword = Buffer.from(password);
+
+    //To hash a password
+    pwd.hash(hashedPassword, function (err, hash) {
+
+            console.log(hashedPassword)
+        if (err) throw err
+
+        pwd.verify(hashedPassword, hash, function(err, result) {
+
+            if (err) throw  err
+
+            switch (result) {
+                case securePassword.INVALID_UNRECOGNIZED_HASH:
+                  return console.error('This hash was not made with secure-password. Attempt legacy algorithm')
+                case securePassword.INVALID:
+                  return console.log('Invalid password')
+                case securePassword.VALID:
+                  return console.log('Authenticated')
+                case securePassword.VALID_NEEDS_REHASH:
+                  console.log('Yay you made it, wait for us to improve your safety')
+
+                pwd.hash(hashedPassword, function (err, improvedHash) {
+                    if (err) console.log('You are authenticated, but we could not improve your safety this time around')
+            })
+         };
+    })
+});
    
-    db.any(`UPDATE Registration SET password = $1 WHERE username = $2`, [password, username])
+    db.any(`UPDATE Registration SET password = $1 WHERE username = $2`, [hashedPassword, username])
     .then((newUserData) => {     
 
         console.log(`The user: ${username} has been added on ${Date()} with password`);
@@ -103,4 +130,4 @@ app.get('/searchuser',async (req, res) => {
                      console.log('Error:', error)
                      res.status(400).send('Request not found');
                  })
-                });        
+                });       
