@@ -7,6 +7,8 @@ const { queryResult } = require('pg-promise');
 const validator = require('validator');
 const securePassword = require('secure-password');
 
+const ping = require('./routes/ping');
+
 const pwd = securePassword();
 
 const pgp = require('pg-promise')({});
@@ -20,6 +22,8 @@ app.listen(
     console.log(`http://localhost:${port}`)
 );
 
+
+app.get('/ping', ping);
 
 app.get('/getuser',async (req, res) => (
    await db.any( `SELECT fullname, username, gender, email FROM Registration`)
@@ -56,6 +60,10 @@ app.post('/adduser', (req, res) => {
     })
     
 });
+
+
+
+
 
 app.post('/addpassword', (req, res) => {
     const { username } = req.query;
