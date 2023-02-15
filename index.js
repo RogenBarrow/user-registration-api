@@ -12,7 +12,7 @@ const router = require('./router');
 const pwd = securePassword();
 
 const pgp = require('pg-promise')({});
-const db = pgp('postrgres://postgres:Nathifa@localhost:8033/Client_Registration')
+var db = pgp('postrgres://postgres:Nathifa@localhost:8033/Client_Registration')
 
 app.use(bodyParser.json());
 app.use(router);
