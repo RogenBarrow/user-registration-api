@@ -1,6 +1,7 @@
 const pgp = require('pg-promise')({});
 const db = pgp('postrgres://postgres:Nathifa@localhost:8033/Client_Registration')
 
+
 const searchuser = async (req, res) => {
 const {username} = req.query;
 console.log(username);

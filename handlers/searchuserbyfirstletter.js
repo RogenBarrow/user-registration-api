@@ -1,5 +1,9 @@
-const pgp = require('pg-promise')({});
-const db = pgp('postrgres://postgres:Nathifa@localhost:8033/Client_Registration')
+const globalConnect = require('../db/dbconnect');
+
+// const pgp = require('pg-promise')({});
+// const db = pgp('postrgres://postgres:Nathifa@localhost:8033/Client_Registration')
+
+globalConnect.searchuserbyfirstletter()
 
 const searchuserbyfirstletter = async (req, res) => {
 const { firstletter } = req.query;

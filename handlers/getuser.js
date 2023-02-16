@@ -1,5 +1,9 @@
+const database = require('./db/connect');
+
 const pgp = require('pg-promise')({});
 const db = pgp('postrgres://postgres:Nathifa@localhost:8033/Client_Registration')
+
+database.getuser()
 
 const getuser = async (req,res) => {
   await db.any( `SELECT fullname, username, gender, email FROM Registration`)

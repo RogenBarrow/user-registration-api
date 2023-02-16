@@ -11,10 +11,14 @@ const router = require('./router');
 
 const pwd = securePassword();
 
-const globalConnect = () => {
+const database = () => {
 const pgp = require('pg-promise')({});
 const db = pgp('postrgres://postgres:Nathifa@localhost:8033/Client_Registration')
 }
+
+
+database.getuser();
+
 
 app.use(bodyParser.json());
 app.use(router);
