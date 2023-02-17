@@ -8,17 +8,14 @@ const validator = require('validator');
 const securePassword = require('secure-password');
 
 const router = require('./router');
+const database = require('./db/database');
 
 const pwd = securePassword();
 
-const database = () => {
-const pgp = require('pg-promise')({});
-const db = pgp('postrgres://postgres:Nathifa@localhost:8033/Client_Registration')
-}
-
-
-database.getuser();
-
+database
+    .connect()
+    .then(() => console.log('Database connected.'))
+    .catch((error) => console.error('Database error: ', error))
 
 app.use(bodyParser.json());
 app.use(router);

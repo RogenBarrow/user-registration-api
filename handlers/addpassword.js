@@ -1,5 +1,5 @@
-const pgp = require('pg-promise')({});
-const db = pgp('postrgres://postgres:Nathifa@localhost:8033/Client_Registration')
+// const pgp = require('pg-promise')({});
+// const db = pgp('postrgres://postgres:Nathifa@localhost:8033/Client_Registration')
 const securePassword = require('secure-password');
 const pwd = securePassword();
 
