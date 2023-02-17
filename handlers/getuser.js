@@ -8,6 +8,6 @@ const getuser = async (req,res) => {
         console.error("GET USERS ERROR: ", error);
         res.status(400).send("Error retreiving Users");        
     }
-}
+} 
 
 module.exports = getuser;
