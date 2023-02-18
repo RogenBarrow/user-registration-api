@@ -3,14 +3,11 @@ const app = express()
 const port = 55;
 const bodyParser = require('body-parser');
 const { query } = require('express');
-const { queryResult } = require('pg-promise');
-const validator = require('validator');
 const securePassword = require('secure-password');
 
 const router = require('./router');
 const database = require('./db/database');
 
-const pwd = securePassword();
 
 database
     .connect()
